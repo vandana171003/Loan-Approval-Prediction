@@ -1,0 +1,4 @@
+# Keep local dataset files out of GitHub
+*.csv
+__pycache__/
+.streamlit/secrets.toml
