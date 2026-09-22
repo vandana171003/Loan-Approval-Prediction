@@ -153,16 +153,7 @@ elif section=="Loan Prediction":
                 submit=st.form_submit_button("🔮 Predict Loan Status")
             if submit:
                 row=pd.DataFrame([{"no_of_dependents":dep,"education":0 if edu=="Graduate" else 1,"self_employed":0 if emp=="No" else 1,"income_annum":income,"loan_amount":amount,"loan_term_years":term,"cibil_score":cibil,"residential_assets_value":res,"commercial_assets_value":com,"luxury_assets_value":lux,"bank_balance":bank}])
-                row[SCALE]=scaler.transform(row[SCALE])
-                raw_pred=model.predict(row[FEATURES])[0]
-                if isinstance(raw_pred, str):
-                    label=raw_pred.strip().lower()
-                    p=0 if label=="approved" else 1 if label=="rejected" else int(raw_pred)
-                else:
-                    p=int(raw_pred)
-                classes=list(model.classes_)
-                pred_index=classes.index(raw_pred)
-                prob=model.predict_proba(row[FEATURES])[0][pred_index]*100
+                row[SCALE]=scaler.transform(row[SCALE]); p=int(model.predict(row[FEATURES])[0]); prob=model.predict_proba(row[FEATURES])[0][p]*100
                 (st.success if p==0 else st.error)(f"{'✅ Approved' if p==0 else '❌ Rejected'}")
                 st.metric("Model Confidence",f"{prob:.2f}%")
         except Exception as e: st.error(str(e))
